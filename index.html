@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لعبة الرقم الناقص الاحترافية</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  background:#0f1220;
+  font-family:'Orbitron', Arial, sans-serif;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding-top:20px;
+  box-sizing:border-box;
+}
+.game, .intro{
+  width: 100%;
+  max-width: 400px;
+  text-align:center;
+  position:relative;
+  margin:auto;
+  padding:10px;
+  box-sizing:border-box;
+}
+.intro{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  height:80vh;
+}
+.intro h1{
+  font-size: clamp(24px, 6vw, 36px);
+  color: #ffdd59;
+  text-shadow: 2px 2px 8px #e67e22;
+  margin-bottom:15px;
+}
+.intro p{
+  font-size: clamp(14px, 4vw, 18px);
+  color: #fff;
+  text-shadow: 1px 1px 4px #000;
+  margin-bottom:25px;
+  line-height:1.5;
+}
+.intro button{
+  padding:12px 24px;
+  font-size: clamp(16px,4vw,20px);
+  font-weight:bold;
+  border:none;
+  border-radius:12px;
+  background: linear-gradient(135deg,#3498db,#9b59b6);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
+  transition:0.3s;
+  margin-top:10px;
+}
+.intro button:hover{
+  transform:scale(1.05);
+}
+.top-bar{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.level-container{
+  background:linear-gradient(45deg,#3498db,#9b59b6);
+  padding: clamp(6px, 2vw, 10px) clamp(10px, 4vw, 16px);
+  border-radius:25px;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
+  color:#fff;
+}
+.decorative-text{
+  font-size: clamp(16px, 4vw, 22px);
+  font-weight:bold;
+  color:#ffdd59;
+  text-shadow: 2px 2px 6px #e67e22;
+  font-family:'Orbitron', sans-serif;
+  flex:1;
+  text-align:center;
+}
+.language-container{
+  background:linear-gradient(45deg,#e74c3c,#f39c12);
+  padding: clamp(6px, 2vw, 10px) clamp(10px, 4vw, 16px);
+  border-radius:25px;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
+  color:#fff;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.effects-toggle{
+  background:linear-gradient(45deg,#f39c12,#f1c40f);
+  padding: clamp(6px, 2vw, 10px) clamp(10px, 4vw, 16px);
+  border-radius:25px;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
+  color:#fff;
+  cursor:pointer;
+}
+.circle{
+  position:relative;
+  width: 90%;
+  max-width: 260px;
+  aspect-ratio: 1/1;
+  margin:0 auto 20px auto;
+}
+.num{
+  position:absolute;
+  width: clamp(36px, 8%, 42px);
+  height: clamp(36px, 8%, 42px);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  font-size: clamp(14px, 4vw, 18px);
+  transition: all 0.3s;
+}
+.hidden{
+  background:#111;
+  color:#111;
+}
+.options{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+.options button{
+  padding: clamp(8px,2vw,10px) clamp(12px,3vw,16px);
+  border:none;
+  border-radius:8px;
+  font-size: clamp(14px,3vw,16px);
+  cursor:pointer;
+  transition:0.2s;
+  font-weight:bold;
+  color:#fff;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 8px rgba(0,198,255,0.7);
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+.options button:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 8px #fff;
+}
+.options button.correct{
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 0 12px #2ecc71, 0 0 8px #27ae60;
+  color:#fff;
+}
+.options button.wrong{
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  box-shadow: 0 0 12px #e74c3c, 0 0 8px #c0392b;
+  color:#fff;
+}
+.result{
+  margin-top:10px;
+  min-height:28px;
+  font-weight:bold;
+  font-size:20px;
+  text-shadow: 1px 1px 4px #000;
+}
+</style>
+</head>
+
+<body>
+<!-- المقدمة -->
+<div class="intro" id="introScreen">
+  <h1 id="introTitle">لعبة الرقم الناقص</h1>
+  <p id="introText">تحدى ذاكرتك وسرعتك!  
+  ستظهر لك دائرة مليئة بالأرقام، وعليك تذكر الرقم الناقص.  
+  كلما تقدمت في المستويات، تصبح اللعبة أصعب وأسرع.  
+  استمتع بالتحدي واحصل على أعلى نقاطك!</p>
+  <button id="startGameBtn">ابدأ اللعبة</button>
+  <button id="introLangBtn" style="margin-top:15px;">🌐 العربية</button>
+</div>
+
+<!-- اللعبة -->
+<div class="game" id="gameScreen" style="display:none">
+  <!-- الشريط العلوي -->
+  <div class="top-bar">
+    <div class="level-container" id="level">مستوى 1</div>
+    <div class="decorative-text" id="decorativeText">اختر الرقم الناقص</div>
+    <div class="language-container" id="languageToggle">
+      🌐 <span id="langText">العربية</span>
+    </div>
+    <div class="effects-toggle" id="effectsToggle">🔊 تشغيل</div>
+  </div>
+
+  <!-- دائرة الأرقام -->
+  <div class="circle" id="circle"></div>
+  <div class="options" id="options"></div>
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+let level = 1;
+let missing = 0;
+let lang = "ar";
+const maxLevel = 50;
+let effectsOn = true;
+
+const texts={
+  ar:{choose:"اختر الرقم الناقص",correct:"✅ صحيح",wrong:"❌ خطأ",level:"مستوى"},
+  en:{choose:"Choose the missing number",correct:"✅ Correct",wrong:"❌ Wrong",level:"Level"}
+};
+
+function getRandomColor(){
+  const colors=["#e74c3c","#2ecc71","#3498db","#f1c40f","#9b59b6","#1abc9c","#e67e22","#95a5a6","#d35400","#c0392b"];
+  return colors[Math.floor(Math.random()*colors.length)];
+}
+
+// الأصوات
+const correctSound = new Audio("https://orangefreesounds.com/wp-content/uploads/2023/02/Correct-ding-sound-effect.mp3");
+const wrongSound = new Audio("https://orangefreesounds.com/wp-content/uploads/2025/03/Wrong-buzzer-sound-effect.mp3");
+
+// زر التوقف/تشغيل التأثيرات
+document.getElementById("effectsToggle").addEventListener("click", ()=>{
+  effectsOn = !effectsOn;
+  document.getElementById("effectsToggle").innerText = effectsOn ? "🔊 تشغيل" : "🔇 إيقاف";
+});
+
+// بدء اللعبة
+document.getElementById("startGameBtn").addEventListener("click", ()=>{
+  document.getElementById("introScreen").style.display="none";
+  document.getElementById("gameScreen").style.display="block";
+  
+  const savedLevel = parseInt(localStorage.getItem("savedLevel"));
+  if(savedLevel && savedLevel <= maxLevel) level = savedLevel;
+  startLevel();
+});
+
+function startLevel(){
+  if(level > maxLevel){
+    document.getElementById("gameScreen").innerHTML = `
+      <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:80vh;">
+        <h2 style="color:#ffdd59;text-shadow: 2px 2px 8px #e67e22;font-size: clamp(20px,5vw,28px);margin-bottom:20px;text-align:center;">🎉 هل أعجبتكم اللعبة؟ 🎉</h2>
+        <button id="restartBtn" style="padding:12px 24px;font-size:18px;font-weight:bold;border:none;border-radius:12px;background: linear-gradient(135deg,#3498db,#9b59b6);color:#fff;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.5);transition:0.3s;">إعادة اللعبة</button>
+      </div>`;
+    document.getElementById("restartBtn").addEventListener("click", ()=>{
+      level=1; localStorage.removeItem("savedLevel"); location.reload();
+    });
+    return;
+  }
+
+  localStorage.setItem("savedLevel", level);
+  document.getElementById("level").innerText=texts[lang].level+" "+level;
+  document.getElementById("decorativeText").innerText=texts[lang].choose;
+  document.getElementById("result").innerText="";
+
+  const baseCount = level<=3?10:10+level*2;
+  let numbers=[];
+  for(let i=1;i<=baseCount;i++) numbers.push(i);
+  if(level>3) numbers.sort(()=>Math.random()-0.5);
+
+  missing = numbers[Math.floor(Math.random()*numbers.length)];
+  const circle=document.getElementById("circle");
+  circle.innerHTML="";
+  const radius=110;
+  numbers.forEach((n,i)=>{
+    const angle=(2*Math.PI/numbers.length)*i;
+    const x=110+radius*Math.cos(angle);
+    const y=110+radius*Math.sin(angle);
+    const d=document.createElement("div");
+    d.className="num";
+    d.style.left=x+"px";
+    d.style.top=y+"px";
+    d.style.background=getRandomColor();
+    d.innerText=n;
+    if(n===missing) d.dataset.miss=1;
+    circle.appendChild(d);
+  });
+
+  const memoryTime=Math.max(2000-level*150,600);
+  setTimeout(()=>{
+    document.querySelectorAll("[data-miss]").forEach(e=>{
+      e.innerText="?"; e.classList.add("hidden");
+    });
+    showOptions(baseCount);
+  },memoryTime);
+}
+
+function showOptions(max){
+  const opt=document.getElementById("options");
+  opt.innerHTML="";
+  for(let i=1;i<=max;i++){
+    const b=document.createElement("button");
+    b.innerText=i;
+    b.onclick=()=>check(i);
+    opt.appendChild(b);
+  }
+}
+
+function check(val){
+  const r=document.getElementById("result");
+  const buttons=document.querySelectorAll("#options button");
+  buttons.forEach(b=>{
+    if(parseInt(b.innerText)===val){
+      if(val===missing){
+        r.innerHTML=texts[lang].correct;
+        b.classList.add("correct");
+        if(effectsOn){ correctSound.currentTime=0; correctSound.play(); }
+        setTimeout(()=>{
+          b.classList.remove("correct");
+          if(level<maxLevel) level++;
+          startLevel();
+        },800);
+      }else{
+        r.innerHTML=texts[lang].wrong;
+        b.classList.add("wrong");
+        if(effectsOn){ wrongSound.currentTime=0; wrongSound.play(); }
+        setTimeout(()=>{
+          b.classList.remove("wrong");
+          startLevel();
+        },800);
+      }
+    }
+  });
+}
+
+// زر الترجمة في اللعبة
+document.getElementById("languageToggle").addEventListener("click", ()=>{
+  lang=(lang==="ar")?"en":"ar";
+  document.getElementById("langText").innerText=(lang==="ar")?"العربية":"English";
+  startLevel();
+});
+
+// ترجمة المقدمة
+const introLangBtn=document.getElementById("introLangBtn");
+let introLang="ar";
+introLangBtn.addEventListener("click", ()=>{
+  if(introLang==="ar"){
+    document.getElementById("introTitle").innerText="Missing Number Game";
+    document.getElementById("introText").innerText="Challenge your memory and speed! \nA circle full of numbers will appear, and you must remember the missing number. \nAs you advance through levels, the game gets harder and faster. \nEnjoy the challenge and get your highest score!";
+    introLangBtn.innerText="🌐 English"; introLang="en";
+  }else{
+    document.getElementById("introTitle").innerText="لعبة الرقم الناقص";
+    document.getElementById("introText").innerText="تحدى ذاكرتك وسرعتك!  \nستظهر لك دائرة مليئة بالأرقام، وعليك تذكر الرقم الناقص.  \nكلما تقدمت في المستويات، تصبح اللعبة أصعب وأسرع.  \nاستمتع بالتحدي واحصل على أعلى نقاطك!";
+    introLangBtn.innerText="🌐 العربية"; introLang="ar";
+  }
+});
+</script>
+
+</body>
+</html>
